@@ -1,7 +1,7 @@
-const connection = require('../connection');
+const connection = require('../../connection');
 const bcrypt = require('bcrypt');
 const jwt = require("jsonwebtoken");
-const jwt_Secret = require("../jwt_secrets");
+const jwt_Secret = require("../../jwt_secrets");
 
 const login = async (req, res) => {
   const {
@@ -28,15 +28,18 @@ const login = async (req, res) => {
     const checkedPassword = await bcrypt.compare(senha, customer.senha);
 
     if (!checkedPassword) {
-      return res.status(400).json('e-mail e/ou senha inválido(s).');
+      return res.status(400).json('E-mail e/ou senha inválido(s).');
     }
 
     const token = jwt.sign({
       id: customer.id
     }, jwt_Secret);
-    console.log(token);
     return res.status(200).json(token);
   } catch (error) {
     return res.status(400).json(error.message);
   }
+}
+
+module.exports = {
+  login
 }
