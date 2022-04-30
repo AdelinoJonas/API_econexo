@@ -1,6 +1,8 @@
 const express = require('express');
+const customer = require('./controllers/customer');
 
-const rotas = express();
+const routes = express();
 
+routes.post('/cadastrarCliente', customer.registerCustomer);
 
-module.exports = rotas;
+module.exports = routes;
