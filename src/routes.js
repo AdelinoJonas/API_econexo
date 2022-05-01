@@ -18,4 +18,6 @@ routes.post('/supplier/login', loginSupplier.login);
 routes.post('/supplier', supplier.registerSupplier);
 routes.get('/supplier', authSupplier, getSupplier.getSupplier);
 
+routes.post("/cadastrarProduto", product.createProduct);
+
 module.exports = routes;
