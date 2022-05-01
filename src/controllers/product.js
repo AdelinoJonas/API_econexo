@@ -1,5 +1,4 @@
 const connection = require("../connection");
-const bcrypt = require("bcrypt");
 
 // ==> Método responsável por criar um novo 'Product':
 exports.createProduct = async (req, res) => {
