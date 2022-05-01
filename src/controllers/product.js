@@ -11,7 +11,7 @@ exports.createProduct = async (req, res) => {
     price,
   } = req.body;
   const response = await connection.query(
-    "INSERT INTO products (product_name, product_image, product_description, product_category, quantity, price) VALUES ($1, $2, $3,$4)",
+    "INSERT INTO product (product_name, product_image, product_description, product_category, quantity, price) VALUES ($1, $2, $3,$4)",
     [product_name, product_description, quantity, price]
   );
 
@@ -30,10 +30,10 @@ exports.createProduct = async (req, res) => {
   });
 };
 
-// ==> Método responsável por listar todos os 'Products':
+// ==> Método responsável por listar todos os 'product':
 exports.listAllProducts = async (req, res) => {
   const response = await connection.query(
-    "SELECT * FROM products ORDER BY product_name ASC"
+    "SELECT * FROM product ORDER BY product_name ASC"
   );
   res.status(200).send(response.rows);
 };
@@ -42,7 +42,7 @@ exports.listAllProducts = async (req, res) => {
 exports.findProductById = async (req, res) => {
   const productId = parseInt(req.params.id);
   const response = await connection.query(
-    "SELECT * FROM products WHERE product_id = $1",
+    "SELECT * FROM product WHERE product_id = $1",
     [productId]
   );
   res.status(200).send(response.rows);
@@ -61,7 +61,7 @@ exports.updateProductById = async (req, res) => {
   } = req.body;
 
   const response = await connection.query(
-    "UPDATE products SET product_name = $1, quantity = $2, price = $3 WHERE product_id = $4",
+    "UPDATE product SET product_name = $1, quantity = $2, price = $3 WHERE product_id = $4",
     [
       product_name,
       product_image,
@@ -79,7 +79,7 @@ exports.updateProductById = async (req, res) => {
 // ==> Método responsável por excluir um 'Product' pelo 'Id':
 exports.deleteProductById = async (req, res) => {
   const productId = parseInt(req.params.id);
-  await connection.query("DELETE FROM products WHERE product_id = $1", [
+  await connection.query("DELETE FROM product WHERE product_id = $1", [
     productId,
   ]);
 
@@ -89,7 +89,7 @@ exports.deleteProductById = async (req, res) => {
 // ==> Método responsável por listar todos os 'Products' por categoria:
 exports.listProductsByCategory = async (req, res) => {
   const response = await connection.query(
-    "SELECT * FROM products ORDER BY product_category ASC"
+    "SELECT * FROM product ORDER BY product_category ASC"
   );
   res.status(200).send(response.rows);
 };
