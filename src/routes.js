@@ -5,6 +5,22 @@ const product = require("./controllers/product");
 const routes = express();
 
 routes.post("/cadastrarCliente", customer.registerCustomer);
-routes.post("/cadastrarProduto", product.createProduct);
+// ==> Definindo as rotas do CRUD - 'Product':
 
+// ==> Rota responsável por criar um novo 'Product': (POST): localhost:3000/api/products
+router.post("/products", product.createProduct);
+
+// ==> Rota responsável por listar todos os 'Products': (GET): localhost:3000/api/products
+router.get("/products", product.listAllProducts);
+
+// ==> Rota responsável por selecionar 'Product' pelo 'Id': (GET): localhost:3000/api/products/:id
+router.get("/products/:id", product.findProductById);
+
+// ==> Rota responsável por atualizar 'Product' pelo 'Id': (PUT): localhost: 3000/api/products/:id
+router.put("/products/:id", product.updateProductById);
+
+// ==> Rota responsável por excluir 'Product' pelo 'Id': (DELETE): localhost:3000/api/products/:id
+router.delete("/products/:id", product.deleteProductById);
+
+// => Exportação do módulo
 module.exports = routes;
