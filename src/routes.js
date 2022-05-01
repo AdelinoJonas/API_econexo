@@ -22,5 +22,8 @@ routes.put("/products/:id", product.updateProductById);
 // ==> Rota responsável por excluir 'Product' pelo 'Id': (DELETE): localhost:3000/api/products/:id
 routes.delete("/products/:id", product.deleteProductById);
 
+// ==> Rota responsável por listar todos os 'Products' por categoria:
+routes.get("/products/:id", product.listProductsByCategory);
+
 // => Exportação do módulo
 module.exports = routes;

@@ -2,16 +2,30 @@ const connection = require("../connection");
 
 // ==> Método responsável por criar um novo 'Product':
 exports.createProduct = async (req, res) => {
-  const { product_name, product_description, quantity, price } = req.body;
+  const {
+    product_name,
+    product_image,
+    product_description,
+    product_category,
+    quantity,
+    price,
+  } = req.body;
   const response = await connection.query(
-    "INSERT INTO products (product_name, product_description, quantity, price) VALUES ($1, $2, $3,$4)",
+    "INSERT INTO products (product_name, product_image, product_description, product_category, quantity, price) VALUES ($1, $2, $3,$4)",
     [product_name, product_description, quantity, price]
   );
 
   res.status(201).send({
     message: "Product added successfully!",
     body: {
-      product: { product_name, product_description, quantity, price },
+      product: {
+        product_name,
+        product_image,
+        product_description,
+        product_category,
+        quantity,
+        price,
+      },
     },
   });
 };
@@ -37,11 +51,26 @@ exports.findProductById = async (req, res) => {
 // ==> Método responsável por atualizar um 'Product' pelo 'Id':
 exports.updateProductById = async (req, res) => {
   const productId = parseInt(req.params.id);
-  const { product_name, product_description, quantity, price } = req.body;
+  const {
+    product_name,
+    product_image,
+    product_description,
+    product_category,
+    quantity,
+    price,
+  } = req.body;
 
   const response = await connection.query(
     "UPDATE products SET product_name = $1, quantity = $2, price = $3 WHERE product_id = $4",
-    [product_name, product_description, quantity, price, productId]
+    [
+      product_name,
+      product_image,
+      product_description,
+      product_category,
+      quantity,
+      price,
+      productId,
+    ]
   );
 
   res.status(200).send({ message: "Product Updated Successfully!" });
@@ -55,4 +84,12 @@ exports.deleteProductById = async (req, res) => {
   ]);
 
   res.status(200).send({ message: "Product deleted successfully!", productId });
+};
+
+// ==> Método responsável por listar todos os 'Products' por categoria:
+exports.listProductsByCategory = async (req, res) => {
+  const response = await connection.query(
+    "SELECT * FROM products ORDER BY product_category ASC"
+  );
+  res.status(200).send(response.rows);
 };
