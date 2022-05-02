@@ -46,19 +46,29 @@ Foi criado um Banco de Dados PostgreSQL chamado `api_econexo_db` contendo as seg
 -   usuarios
     -   id
     -   nome
-    -   nome_loja (o nome da loja deste vendedor)
+    -   cpf
+    -   endereço
     -   email (campo único)
     -   senha
+    
+-   fornecedores
+    -   id
+    -   nome (o nome da loja deste vendedor)
+    -   segmento
+    -   cnpj
+    -   telefone
+    -   endereco
+    -   nome (o nome da loja deste vendedor)
+    -   email (campo único)
+    -   senha
+    
 -   produtos
     -   id
-    -   usuario_id
     -   nome
-    -   quantidade
+    -   imagem
     -   categoria
-    -   preco
     -   descricao
-    -   imagem (campo texto para URL da imagem na web)
- 
+    -   preco 
 
 ## **Endpoints**
 
@@ -78,9 +88,9 @@ Essa é a rota que será utilizada para cadastrar um novo cliente no sistema.
 {
     "nome": "testando",
     "email": "teste@email.com",
-		"cpf": "12345678961",
-		"endereco": "Rua x",
-		"senha": "12345"
+    "cpf": "12345678961",
+    "endereco": "Rua x",
+    "senha": "12345"
 }
 ```
 ### **Login do Cliente**
@@ -142,11 +152,11 @@ Essa é a rota que será chamada quando o usuario quiser obter os dados do seu p
     "id": 1,
     "nome": "Material de Construção",
     "email": "construcao@email.com",
-		"segmento": "Madeira",
-		"cnpj": "38739873594",
-		"telefone": "41984498900",
-		"endereco": "Rua x",
-		"senha": "$2b$10$yziHx6UT/AwuQVqRdrvkkOhqmvxrTLUskT5R606f7aI2j.DPy8HzW"
+    "segmento": "Madeira",
+    "cnpj": "38739873594",
+    "telefone": "41984498900",
+    "endereco": "Rua x",
+    "senha": "$2b$10$yziHx6UT/AwuQVqRdrvkkOhqmvxrTLUskT5R606f7aI2j.DPy8HzW"
 }
 
 ```
@@ -161,101 +171,32 @@ Essa é a rota que será chamada quando o usuario quiser obter os dados do seu p
 
 #### `POST` `/products`
 
-http://localhost:3000/supplier/products
+http://localhost:3000/products
 
 Essa é a rota que será utilizada para cadastrar um produto associado ao usuário logado.  
 
 #### **Exemplo de requisição**
 ```javascript
-// POST /supplier/products
-{
-    "nome": "Camisa preta",
-    "quantidade": 8,
-    "categoria": "Camisa",
-    "preco": 4990,
-    "descricao": "Camisa de malha com acabamento fino.",
-    "imagem": "https://bit.ly/3ctikxq"
-}
+// POST /products
+  {
+        "id": 1,
+        "usuario_id": 1,
+        "nome": "Biomassa",
+        "quantidade": 12,
+        "categoria": "construção",
+        "preco": 4990,
+        "descricao": "cimento ecologico.",
+        "imagem": "https://bit.ly/3ctikxq",
+    }
 ```
 
-#### **Exemplos de resposta**
-
-```javascript
-// HTTP Status 200 / 201 / 204
-// Sem conteúdo no corpo (body) da resposta
-```
-```javascript
-// HTTP Status 400 / 401 / 403 / 404
-{
-    "mensagem": "O preço do produto deve ser informado."
-}
-```
-```javascript
-// HTTP Status 400 / 401 / 403 / 404
-{
-    "mensagem": "Para cadastrar um produto, o usuário deve estar autenticado."
-}
-```
 ### **Listar produtos**
 
 #### `GET` `/products`
 
-http://localhost:3000/produtos?categoria=Camisa
+http://localhost:3000/products
 
-Essa é a rota que será chamada quando o usuario logado quiser listar todos os seus produtos cadastrados.   
-
-#### **Exemplo de requisição**
-```javascript
-// GET /produtos
-// Sem conteúdo no corpo (body) da requisição
-```
-
-#### **Exemplos de resposta**
-
-```javascript
-// HTTP Status 200 / 201 / 204
-[
-    {
-        "id": 1,
-        "usuario_id": 1,
-        "nome": "Camisa preta",
-        "quantidade": 12,
-        "categoria": "Camisas",
-        "preco": 4990,
-        "descricao": "Camisa de malha com acabamento fino.",
-        "imagem": "https://bit.ly/3ctikxq",
-    },
-    {
-        "id": 2,
-        "usuario_id": 1,
-        "nome": "Calça jeans azul",
-        "quantidade": 8,
-        "categoria": "Calças",
-        "preco": 4490,
-        "descricao": "Calça jeans azul.",
-        "imagem": "https://bit.ly/3ctikxq",
-    },
-]
-```
-```javascript
-// HTTP Status 200 / 201 / 204
-[]
-```
-```javascript
-// HTTP Status 400 / 401 / 403 / 404
-{
-    "mensagem": "Para acessar este recurso um token de autenticação válido deve ser enviado."
-}
-```
-
-### **Detalhar um produto do usuário logado**
-
-#### `GET` `/produtos/:id`
-
-http://localhost:3000/produtos?categoria=Camisa
-
-Essa é a rota que será chamada quando o usuario logado quiser obter um dos seus produtos cadastrados.  
-**Lembre-se:** Deverá ser retornado **apenas** produto associado ao usuário logado, que deverá ser identificado através do ID presente no token de validação.
+Essa é a rota que será chamada quando o cliente logado quiser listar todos os seus produtos cadastrados.   
 
 #### **Exemplo de requisição**
 ```javascript
@@ -267,48 +208,80 @@ Essa é a rota que será chamada quando o usuario logado quiser obter um dos seu
 
 ```javascript
 // HTTP Status 200 / 201 / 204
-{
-    "id": 1,
-    "usuario_id": 1,
-    "nome": "Camisa preta",
-    "quantidade": 8,
-    "categoria": "Camisa",
-    "preco": 4990,
-    "descricao": "Camisa de malha com acabamento fino.",
-    "imagem": "https://bit.ly/3ctikxq"
-}
+[
+  {
+        "id": 1,
+        "usuario_id": 1,
+        "nome": "Biomassa",
+        "quantidade": 12,
+        "categoria": "construção",
+        "preco": 4990,
+        "descricao": "cimento ecologico.",
+        "imagem": "https://bit.ly/3ctikxq",
+    },
+    {
+        "id": 2,
+        "usuario_id": 1,
+        "nome": "ripa",
+        "quantidade": 8,
+        "categoria": "madeira",
+        "preco": 4490,
+        "descricao": "Ripa 1x2.",
+        "imagem": "https://bit.ly/3ctikxq",
+    },
+]
 ```
+
+### **Detalhar um produto**
+
+#### `GET` `/products/:id`
+
+http://localhost:3000/products/:id
+
+Essa é a rota que será chamada quando o cliente logado quiser obter um dos seus produtos cadastrados.  
+
+#### **Exemplo de requisição**
 ```javascript
-// HTTP Status 400 / 401 / 403 / 404
-{
-    "mensagem": "Não existe produto cadastrado com ID 44."
-}
+// GET /produtos/44
+// Sem conteúdo no corpo (body) da requisição
 ```
+
+#### **Exemplos de resposta**
+
 ```javascript
-// HTTP Status 400 / 401 / 403 / 404
-{
-    "mensagem": "O usuário logado não tem permissão para acessar este produto."
-}
+// HTTP Status 200 / 201 / 204
+   {
+        "id": 1,
+        "usuario_id": 1,
+        "nome": "Biomassa",
+        "quantidade": 12,
+        "categoria": "construção",
+        "preco": 4990,
+        "descricao": "cimento ecologico.",
+        "imagem": "https://bit.ly/3ctikxq",
+    }
 ```
 
 ### **Atualizar produto do usuário logado**
 
-#### `PUT` `/produtos/:id`
+#### `PUT` `/products/:id`
 
-http://localhost:3000/produtos/5
+http://localhost:3000/products/5
 
-Essa é a rota que será chamada quando o usuario logado quiser atualizar um dos seus produtos cadastrados.  
+Essa é a rota que será chamada quando o cliente logado quiser atualizar um dos seus produtos cadastrados.  
 
 #### **Exemplo de requisição**
 ```javascript
-// PUT /produtos/2
-{
-    "nome": "Calça jeans preta",
-    "quantidade": 22,
-    "categoria": "Calças",
-    "preco": 4490,
-    "descricao": "Calça jeans preta.",
-    "imagem": "https://bit.ly/3ctikxq"
+// PUT /products/2
+   {
+     "id": 1,
+     "usuario_id": 1,
+     "nome": "Biomassa",
+     "quantidade": 12,
+     "categoria": "construção",
+     "preco": 4990,
+     "descricao": "cimento ecologico.",
+     "imagem": "https://bit.ly/3ctikxq",
 }
 ```
 
@@ -327,9 +300,9 @@ Essa é a rota que será chamada quando o usuario logado quiser atualizar um dos
 
 ### **Excluir produto do usuário logado**
 
-#### `DELETE` `/produtos/:id`
+#### `DELETE` `/products/:id`
 
-http://localhost:3000/produtos/5
+http://localhost:3000/products/5
 
 Essa é a rota que será chamada quando o usuario logado quiser excluir um dos seus produtos cadastrados.  
 
@@ -337,25 +310,6 @@ Essa é a rota que será chamada quando o usuario logado quiser excluir um dos s
 ```javascript
 // DELETE /produtos/88
 // Sem conteúdo no corpo (body) da requisição
-```
-
-#### **Exemplos de resposta**
-
-```javascript
-// HTTP Status 200 / 201 / 204
-// Sem conteúdo no corpo (body) da resposta
-```
-```javascript
-// HTTP Status 400 / 401 / 403 / 404
-{
-    "mensagem": "Não existe produto para o ID 88."
-}
-```
-```javascript
-// HTTP Status 400 / 401 / 403 / 404
-{
-    "mensagem": "O usuário autenticado não tem permissão para excluir este produto."
-}
 ```
 
 ---
@@ -376,21 +330,21 @@ Essa é a rota que será chamada quando o usuario logado quiser excluir um dos s
     {
         "id": 1,
         "usuario_id": 1,
-        "nome": "Camisa preta",
+        "nome": "Biomassa",
         "quantidade": 12,
-        "categoria": "Camisas",
+        "categoria": "construção",
         "preco": 4990,
-        "descricao": "Camisa de malha com acabamento fino.",
+        "descricao": "cimento ecologico.",
         "imagem": "https://bit.ly/3ctikxq",
     },
     {
         "id": 2,
         "usuario_id": 1,
-        "nome": "Calça jeans azul",
+        "nome": "ripa",
         "quantidade": 8,
-        "categoria": "Calças",
+        "categoria": "madeira",
         "preco": 4490,
-        "descricao": "Calça jeans azul.",
+        "descricao": "Ripa 1x2.",
         "imagem": "https://bit.ly/3ctikxq",
     },
 ]
@@ -406,6 +360,3 @@ Essa é a rota que será chamada quando o usuario logado quiser excluir um dos s
 }
 ```
 
----
-
-<h1 align="center">Espero que gostem!</h1>
