@@ -19,5 +19,11 @@ routes.post('/supplier', supplier.registerSupplier);
 routes.get('/supplier', authSupplier, getSupplier.getSupplier);
 
 routes.post("/cadastrarProduto", product.createProduct);
+routes.post("/products", product.createProduct);
+routes.get("/products", product.listAllProducts);
+routes.get("/products/:id", product.findProductById);
+routes.put("/products/:id", product.updateProductById);
+routes.delete("/products/:id", product.deleteProductById);
+routes.get("/products/:id", product.listProductsByCategory);
 
 module.exports = routes;
